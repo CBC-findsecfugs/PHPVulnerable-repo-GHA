@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read 
+      contents: read
     outputs:
       checkmarxone-sast-job-output-critical: ${{ steps.checkmarxone-sast-step.outputs.critical-count }}
       checkmarxone-sast-job-output-very-high: ${{ steps.checkmarxone-sast-step.outputs.very-high-count }}
@@ -26,6 +26,13 @@ jobs:
           echo "Subject is $GITHUB_WORKFLOW_REF|${{ github.run_id }}|${{ github.run_attempt }}|${{ github.run_number }}"
           echo "Job is $GITHUB_JOB"
           echo "Step id is ${{ steps.internal.id }}"
+
+      - name: Debug Checkmarx inputs
+        run: |
+          echo "URL: '${{ vars.CHECKMARXONE_URL }}'"
+          echo "Tenant: '${{ vars.CHECKMARXONE_TENANT }}'"
+          echo "Has API Key: ${{ secrets.CHECKMARXONE_API_KEY != '' }}"
+
       - id: checkmarxone-sast-step
         name: Checkmarx One SAST scan
         uses: cloudbees-io-gha/checkmarxone-sast-publish@CBP-36894
