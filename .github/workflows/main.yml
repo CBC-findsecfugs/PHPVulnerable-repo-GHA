@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read
+      contents: read 
     outputs:
       checkmarxone-sast-job-output-critical: ${{ steps.checkmarxone-sast-step.outputs.critical-count }}
       checkmarxone-sast-job-output-very-high: ${{ steps.checkmarxone-sast-step.outputs.very-high-count }}
@@ -25,25 +25,7 @@ jobs:
           echo "Source is ${{ github.server_url }}/${{ github.repository }}"
           echo "Subject is $GITHUB_WORKFLOW_REF|${{ github.run_id }}|${{ github.run_attempt }}|${{ github.run_number }}"
           echo "Job is $GITHUB_JOB"
-          echo "Step id is ${{ steps.internal.id }}"
-
-      - name: Debug Checkmarx inputs
-        run: |
-          echo "URL: '${{ vars.CHECKMARXONE_URL }}'"
-          echo "Tenant: '${{ vars.CHECKMARXONE_TENANT }}'"
-          echo "Has API Key: ${{ secrets.CHECKMARXONE_API_KEY != '' }}"
-
-      - name: Pull required Docker images
-        run: |
-          echo "Pulling assets-plugin-chain-utils..."
-          docker pull public.ecr.aws/l7o7z1g8/actions/assets-plugin-chain-utils:81b0453072476e33ca097de87ba13c5127b45f74 || echo "Failed to pull chain-utils"
-
-          echo "Pulling assets-scc-scanner..."
-          docker pull public.ecr.aws/l7o7z1g8/actions/assets-scc-scanner:884fecd572bb127890a823acc378f1951e72314a || echo "Failed to pull scc-scanner"
-
-          echo "Pulling assets-checkmarxone-sast-scanner..."
-          docker pull public.ecr.aws/l7o7z1g8/actions/assets-checkmarxone-sast-scanner:cacd851159d01128b1ee8af3ec0e4d1b1b193489 || echo "Failed to pull checkmarxone-sast-scanner"
-
+          
       - id: checkmarxone-sast-step
         name: Checkmarx One SAST scan
         uses: cloudbees-io-gha/checkmarxone-sast-publish@CBP-36894
