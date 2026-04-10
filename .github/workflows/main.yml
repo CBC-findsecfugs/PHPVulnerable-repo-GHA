@@ -33,6 +33,17 @@ jobs:
           echo "Tenant: '${{ vars.CHECKMARXONE_TENANT }}'"
           echo "Has API Key: ${{ secrets.CHECKMARXONE_API_KEY != '' }}"
 
+      - name: Pull required Docker images
+        run: |
+          echo "Pulling assets-plugin-chain-utils..."
+          docker pull public.ecr.aws/l7o7z1g8/actions/assets-plugin-chain-utils:81b0453072476e33ca097de87ba13c5127b45f74 || echo "Failed to pull chain-utils"
+
+          echo "Pulling assets-scc-scanner..."
+          docker pull public.ecr.aws/l7o7z1g8/actions/assets-scc-scanner:884fecd572bb127890a823acc378f1951e72314a || echo "Failed to pull scc-scanner"
+
+          echo "Pulling assets-checkmarxone-sast-scanner..."
+          docker pull public.ecr.aws/l7o7z1g8/actions/assets-checkmarxone-sast-scanner:cacd851159d01128b1ee8af3ec0e4d1b1b193489 || echo "Failed to pull checkmarxone-sast-scanner"
+
       - id: checkmarxone-sast-step
         name: Checkmarx One SAST scan
         uses: cloudbees-io-gha/checkmarxone-sast-publish@CBP-36894
